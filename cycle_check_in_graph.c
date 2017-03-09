@@ -14,6 +14,21 @@ char adj_matrix[6][6] = {
     0,0,0,0,0,1
 };
 
+
+/*nodeset_dst[i][k][]表示i节点经过K跳可达节点集合
+ *nodeset_dst_cnt[i][k]记录节点i从发经过k跳可达节点的个数
+ *nodeset_dst_map[i][j] == 1;表示节点j在节点i的可达目的节点集合中。
+ *nodeset_src[i][k][]表示经过经过k跳可达节点i的节点集合
+ *nodeset_src_cnt[i][k]记录经过k跳可达节点i的节点个数
+ *nodeset_src_map[i][j] == 1;表示节点j在可达节点i的源节点集合中
+ *shortest_path[i][j][]记录从i到j经过的最短路径
+ */
+char nodeset_dst[TOTAL_NODE_NUMBER][TOTAL_NODE_NUMBER][TOTAL_NODE_NUMBER];
+char nodeset_dst_cnt[TOTAL_NODE_NUMBER][TOTAL_NODE_NUMBER-1];
+char nodeset_src[TOTAL_NODE_NUMBER][TOTAL_NODE_NUMBER][TOTAL_NODE_NUMBER];
+char nodeset_src_cnt[TOTAL_NODE_NUMBER][TOTAL_NODE_NUMBER-1];
+char shortest_path[TOTAL_NODE_NUMBER][TOTAL_NODE_NUMBER][TOTAL_NODE_NUMBER];
+
 void main() {
     int node_index = 0;
     int loop = 0；
