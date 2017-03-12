@@ -31,9 +31,30 @@ char nodeset_src[TOTAL_NODE_NUMBER][TOTAL_NODE_NUMBER][TOTAL_NODE_NUMBER];
 char nodeset_src_cnt[TOTAL_NODE_NUMBER][TOTAL_NODE_NUMBER-1];
 char nodeset_src_map[TOTAL_NODE_NUMBER][TOTAL_NODE_NUMBER];
 
-char shortest_path[TOTAL_NODE_NUMBER][TOTAL_NODE_NUMBER][TOTAL_NODE_NUMBER];
+/*shortest_path[i][j].node_set表示从i到j的路径包含到节点，含i，j
+ *shortest_path[i][j].node_cnt表示从i到j到路径包含的节点个数，含i，j*/
+typedef struct stPath {
+	char node_cnt;
+	char node_set[TOTAL_NODE_NUMBER];
+};
+stPath shortest_path[TOTAL_NODE_NUMBER][TOTAL_NODE_NUMBER];
+
 void add_to_shortest_path(char firstnode, char lastnode, char newnode) {
-	char tmp_cnt = 0;
+	char tmp_cnt1,tmpc_cnt1,i , tmp_node;
+	if(firstnode == lastnode && lastnode == newnode) {
+		shortest_path[firstnode][firstnode].node_cnt = 1;
+		shortest_path[firstnode][firstnode].node_set[0] = firstnode;
+
+	} else {
+		tmp_cnt1 = shortest_path[firstnode][lastnode].node_cnt;
+		for( ;tmp_cnt1 > 0; tmp_cnt1 --) {
+			tmp_node = shortest_path[firstnode][lastnode].node_set[tmp_cnt1 - 1];
+			tmp_cnt2 = shortest_path[firstnode][tmp_node].node_cnt;
+			for (i = 0; i < tmp_cnt2; i++) {
+				
+			}
+		}
+	}
 	for(tmp_cnt = 0; ;tmp_cnt ++) {
 		if(shortest_path[firstnode][lastnode][tmp_cnt] != -1) {
 			shortest_path[firstnode][newnode][tmp_cnt] = shortest_path[firstnode][lastnode][tmp_cnt];
