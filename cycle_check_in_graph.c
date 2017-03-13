@@ -39,30 +39,27 @@ typedef struct stPath {
 };
 stPath shortest_path[TOTAL_NODE_NUMBER][TOTAL_NODE_NUMBER];
 
-void add_to_shortest_path(char firstnode, char lastnode, char loop, char newnode) {
+void add_to_shortest_path(char firstnode, char lastnode, char newnode) {
 	char tmp_cnt1,tmpc_cnt1,i , tmp_node;
 	if(firstnode == lastnode && lastnode == newnode) {
 		shortest_path[firstnode][firstnode].node_cnt = 1;
 		shortest_path[firstnode][firstnode].node_set[0] = firstnode;
+		nodeset_dst_map[newnode][newnode] = nodeset_src_map[newnode][newnode] = 1;
 
 	} else {
 		tmp_cnt1 = shortest_path[firstnode][lastnode].node_cnt;
 		for( ;tmp_cnt1 > 0; tmp_cnt1 --) {
 			tmp_node = shortest_path[firstnode][lastnode].node_set[tmp_cnt1 - 1];
-			tmp_cnt2 = shortest_path[firstnode][tmp_node].node_cnt;
+			tmp_cnt2 = shortest_path[tmp_node][lastnode].node_cnt;
 			for (i = 0; i < tmp_cnt2; i++) {
-				
+				shortest_path[tmp_node][newnode].node_set[tmp_cnt2] = shortest_path[tmp_node][lastnode].node_set[tmp_cnt2];
 			}
+			shortest_path[tmp_node][lastnode].node_set[tmp_cnt2] = newnode;
+			shortest_path[tmp_node][lastnode].node_cnt = ++ tmp_cnt2;
+			nodeset_dst_map[tmp_node][newnode] = 1;
+			nodeset_src_map[newnode][tmp_node] = 1;
 		}
 	}
-	for(tmp_cnt = 0; ;tmp_cnt ++) {
-		if(shortest_path[firstnode][lastnode][tmp_cnt] != -1) {
-			shortest_path[firstnode][newnode][tmp_cnt] = shortest_path[firstnode][lastnode][tmp_cnt];
-			continue;
-		}
-		break;
-	}
-	shortest_path[firstnode][newnode][tmp_cnt] = newnode;
 }
 
 void main() {
@@ -87,17 +84,22 @@ void main() {
 
 		for(loop = 1; ;loop ++){//遍历从一个节点A出发的跳数
             for(i = 0; i < nodeset_dst_cnt[node_index][loop-1]; i ++) {//遍历到节点A距离LOOP-1跳的节点
-				node_src_tmp = nodeset_dst[node_index][loop -1][i];
+				last_node = nodeset_dst[node_index][loop -1][i];
                 for(j = 0; j < TOTAL_NODE_NUMBER; j ++) {//以到节点A距离LOOP-1跳的节点b作为起始地点查找LOOP跳的节点
-					if(node_src_tmp == j)
+					if(last_node == j){
+						nodeset_dst[j][0][0] = j;
+                		nodeset_dst_cnt[j][0] = 1;
+                		nodeset_dst_map[j][j] = 1;
+                	
+                		nodeset_src[j][0][0] = j;
+                		nodeset_src_cnt[j][0] = 1;
+                		nodeset_src_map[j][j] = 1;
 						continue;
-                    if(adj_matrix[node_src_tmp][j] != 0) {//将节点j加入到node_index的loop跳可达节点中
-						tmp_cnt = nodeset_dst_cnt[node_index][loop];
-						nodeset_dst[node_index][loop][tmp_cnt] = j;
-						nodeset_dst_cnt[node_index][loop] ++;
-						nodeset_dst_map[node_index][j] = 1;
-						/*todo:添加一个节点时，增加处理shortest_path数组的代码*/
-						add_to_shortest_path(node_index, node_src_tmp, loop, j);
+					} else if(adj_matrix[last_node][j] != 0) {//将节点j加入到node_index的loop跳可达节点中
+						add_to_shortest_path(node_index, last_node, j);
+						if(node_src_map[last_node][j] != 0){
+						//找到环了
+						}
 					}
                 }
             }
