@@ -39,7 +39,7 @@ typedef struct stPath {
 };
 stPath shortest_path[TOTAL_NODE_NUMBER][TOTAL_NODE_NUMBER];
 
-void add_to_shortest_path(char firstnode, char lastnode, char newnode) {
+void add_to_shortest_path(char firstnode, char lastnode, char loop, char newnode) {
 	char tmp_cnt1,tmpc_cnt1,i , tmp_node;
 	if(firstnode == lastnode && lastnode == newnode) {
 		shortest_path[firstnode][firstnode].node_cnt = 1;
@@ -86,7 +86,7 @@ void main() {
 		nodeset_src_map[node_index][node_index] = 1;
 
 		for(loop = 1; ;loop ++){//遍历从一个节点A出发的跳数
-            for(i = 0; i < nodeset_dst_cnt[loop-1]; i ++) {//遍历到节点A距离LOOP-1跳的节点
+            for(i = 0; i < nodeset_dst_cnt[node_index][loop-1]; i ++) {//遍历到节点A距离LOOP-1跳的节点
 				node_src_tmp = nodeset_dst[node_index][loop -1][i];
                 for(j = 0; j < TOTAL_NODE_NUMBER; j ++) {//以到节点A距离LOOP-1跳的节点b作为起始地点查找LOOP跳的节点
 					if(node_src_tmp == j)
@@ -97,7 +97,7 @@ void main() {
 						nodeset_dst_cnt[node_index][loop] ++;
 						nodeset_dst_map[node_index][j] = 1;
 						/*todo:添加一个节点时，增加处理shortest_path数组的代码*/
-						add_to_shortest_path(node_index, node_src_tmp, j);
+						add_to_shortest_path(node_index, node_src_tmp, loop, j);
 					}
                 }
             }
