@@ -89,7 +89,9 @@ void main() {
                 for(j = 0; j < TOTAL_NODE_NUMBER; j ++) {//以到节点A距离LOOP-1跳的节点b作为起始地点查找LOOP跳的节点
 					if(last_node == j || nodeset_dst_map[node_index][j] != 0){
 						continue;
-					} else if(adj_matrix[last_node][j] != 0) {//将节点j加入到node_index的loop跳可达节点中
+					} else if(adj_matrix[last_node][j] != 0) {
+						
+						//将节点j加入到node_index的loop跳可达节点中
 						add_to_shortest_path(node_index, last_node, j);
 						
 						node_cnt = nodeset_dst_cnt[node_index][loop];
