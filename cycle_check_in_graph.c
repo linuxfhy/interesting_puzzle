@@ -70,6 +70,9 @@ void graph_init() {
 		nodeset_src[node_index][0][0] = node_index;
 		nodeset_src_cnt[node_index][0] = 1;
 		nodeset_src_map[node_index][node_index] = 1;
+
+		shortest_path[node_index][node_index].node_set[0] = node_index;
+		shortest_path[node_index][node_index].node_cnt = 1;
 	}
 }
 
@@ -96,7 +99,7 @@ void main() {
 						nodeset_dst_map[node_index][j] = nodeset_src_map[j][node_index] = 1;
 
 						if(nodeset_src_map[nose_index][j] != 0){
-						//找到环了
+						//找到环了,打印shortest_path中的路径
 						}
 					}
                 }
